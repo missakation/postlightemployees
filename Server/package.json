@@ -2,7 +2,7 @@
   "name": "api-design-v3",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Scott Moss <willscottmoss@gmail.com>",
+  "author": "Missak Boyajian",
   "license": "MIT",
   "scripts": {
     "build": "babel src --out-dir dist",
