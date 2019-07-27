@@ -21,23 +21,22 @@ const useStyles = makeStyles(theme => ({
         width: 200
     },
     button: {
-        margin: theme.spacing(1)
+        margin: theme.spacing(1),
+        marginTop: 16
     },
     sectionpic: {
         margin: theme.spacing(1)
     }
 
 }));
+
 export default function Register() {
 
 
     const classes = useStyles();
     const [values, setValues] = React.useState({
         name: '',
-        jobTitle: '',
-        department: '',
-        city: '',
-        address: ''
+        password: ''
     });
 
     const handleChange = name => event => {
@@ -49,90 +48,43 @@ export default function Register() {
         event.preventDefault();
 
         var obj = {
-            name: "test",
-            jobtitle: "test"
+            email: values.name,
+            password: values.password
         }
 
-        axios.post("http://localhost:3000/api/employees", obj, {
-            headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkMzkzNjk5MGY5NTYxNTlhOGZiYTdlNiIsImlhdCI6MTU2NDAzMDYxNywiZXhwIjoxNTY1MzI2NjE3fQ.jxURqxT_UKGaDH1k92WY74Pa5UvYFUFpYIaUUuAZLuY'
-            }
-        }).then(res => {
+        axios.post("http://localhost:3000/signup", obj).then(res => {
             console.log("done");
         }).catch(error => {
             console.log(error);
         })
-    }
 
-    const onChangeImage = (e) => {
-        let files = e.target.files;
-        let reader = new FileReader();
-        reader.readAsDataURL(files[0]);
-
-        reader.onload = (e) => {
-            const formData = {
-                file: e.target.result
-            };
-        }
     }
 
     return (
-        <div>
-            <form className={classes.container} noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <div className="login-form">
+
+            <form className={classes.container} onSubmit={handleSubmit}>
                 <TextField
-                    id="employee-name"
-                    label="Name"
+                    id="username"
+                    label="Username"
                     className={classes.textField}
                     value={values.name}
                     onChange={handleChange('name')}
                     margin="normal"
                 />
                 <TextField
-                    id="employee-jobtitle"
-                    label="Job Title"
+                    id="password"
+                    label="Password"
                     className={classes.textField}
-                    value={values.jobTitle}
-                    onChange={handleChange('jobtitle')}
+                    value={values.password}
+                    onChange={handleChange('password')}
+                    type="password"
                     margin="normal"
                 />
-                <TextField
-                    id="employee-department"
-                    label="Department"
-                    className={classes.textField}
-                    value={values.department}
-                    onChange={handleChange('department')}
-                    margin="normal"
-                />
-                <TextField
-                    id="employee-city"
-                    label="City"
-                    className={classes.textField}
-                    value={values.city}
-                    onChange={handleChange('city')}
-                    margin="normal"
-                />
-                <TextField
-                    id="employee-address"
-                    label="Address"
-                    className={classes.textField}
-                    value={values.address}
-                    onChange={handleChange('address')}
-                    margin="normal"
-                />
-
-                <div className={classes.sectionpic}>
-                    <h5>
-                        Profile Image
-                </h5>
-
-                    <input type="file" name="file" onChange={(e) => onChangeImage(e)} />
-                </div>
 
                 <Button type="submit" variant="contained" color="primary" className={classes.button}>
-                    Primary
+                    Register
                 </Button>
-
-
 
             </form>
         </div>
