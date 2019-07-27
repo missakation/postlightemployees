@@ -33,9 +33,11 @@ export const getMany = model => async (req, res) => {
     }
 
     const docs = await model
-      .find(params)
+      .find()
       .lean()
       .exec()
+
+    console.log(docs);
 
     res.status(200).json({ data: docs })
   } catch (e) {
@@ -83,7 +85,7 @@ export const updateOne = model => async (req, res) => {
 export const removeOne = model => async (req, res) => {
   try {
     const removed = await model.findOneAndRemove({
-      createdBy: req.user._id,
+      //createdBy: req.user._id, //uncomment if only delete mine
       _id: req.params.id
     })
 

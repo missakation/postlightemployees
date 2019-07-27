@@ -16,8 +16,7 @@ const listEmployees = new mongoose.Schema(
     },
     createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'user', //RELATION
-      required: true
+      ref: 'user' //RELATION
     }
   },
   { timestamps: true }

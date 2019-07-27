@@ -9,7 +9,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -17,9 +16,17 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import TextField from '@material-ui/core/TextField';
 
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
+
+//DIALOG IMPORTS
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import axios from 'axios';
 import { navigate } from "@reach/router"
@@ -45,9 +52,6 @@ const employeeStyles = makeStyles(theme => ({
 }));
 
 
-
-
-
 function TablePaginationActions(props) {
     const classes = employeeStyles();
     const theme = useTheme();
@@ -68,6 +72,7 @@ function TablePaginationActions(props) {
     function handleLastPageButtonClick(event) {
         onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
     }
+
 
     return (
         <div className={classes.root}>
@@ -128,6 +133,10 @@ function Welcome(props) {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, employees.length - page * rowsPerPage);
 
+    useEffect(() => {
+        getEmployees(1);
+    }, []);
+
     function handleChangePage(event, newPage) {
         getEmployees(newPage);
     }
@@ -156,9 +165,25 @@ function Welcome(props) {
         })
     }
 
-    useEffect(() => {
-        // getEmployees(1);
-    });
+    function editEmployee(employee) {
+
+        console.log('asda');
+
+    }
+
+    function deleteEmployee(employee) {
+        axios.delete("http://localhost:3000/api/employees/" + employee._id, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('postlight-token')
+            }
+        }).then(res => {
+
+            getEmployees(page);
+
+        }).catch(error => {
+
+        })
+    }
 
 
     return (
@@ -175,7 +200,7 @@ function Welcome(props) {
 
                 <Button variant="contained" color="primary" className={classes.button} onClick={openAddEmployeePage}>
                     Add
-                <AddIcon className={classes.rightIcon} />
+                    <AddIcon className={classes.rightIcon} />
                 </Button>
             </div>
 
@@ -193,7 +218,8 @@ function Welcome(props) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {employees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
+                            {/* {employees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => ( */}
+                            {employees.map(row => (
                                 <TableRow key={row.name}>
                                     <TableCell></TableCell>
                                     <TableCell component="th" scope="row">
@@ -202,7 +228,18 @@ function Welcome(props) {
                                     <TableCell align="right">{row.calories}</TableCell>
                                     <TableCell align="right">{row.fat}</TableCell>
                                     <TableCell align="right">{row.fat}</TableCell>
-                                    <TableCell align="right"></TableCell>
+                                    <TableCell align="right">
+                                        <IconButton color="primary" onClick={() => { editEmployee(row) }}
+                                        // onClick={handleFirstPageButtonClick}
+                                        >
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton color="secondary" onClick={() => deleteEmployee(row)}
+                                        // onClick={handleFirstPageButtonClick}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             ))}
 
