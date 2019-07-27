@@ -22,6 +22,10 @@
   color: white;
 }
 
+.page{
+  padding: 16px;
+}
+
 .header-title{
   display: flex;
   margin: 0;
@@ -29,6 +33,16 @@
 
 .App-link {
   color: #61dafb;
+}
+
+/* EMPLOYEE PAGE */
+.emp-sec-options{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ic-add{
+  font-size: 30px;
 }
 
 @keyframes App-logo-spin {
