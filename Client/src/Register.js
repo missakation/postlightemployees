@@ -2,7 +2,8 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import axios from "axios";
+import { authenticationService } from './_services';
+import { navigate } from "@reach/router";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -41,21 +42,16 @@ export default function Register() {
   };
 
   const handleSubmit = event => {
+
     event.preventDefault();
 
-    var obj = {
-      email: values.name,
-      password: values.password
-    };
+    authenticationService.register(values.name, values.password).then(res => {
+      authenticationService.setUser(res);
+      navigate("/employees");
+    }).catch(error => {
+      console.log(error);
+    });
 
-    axios
-      .post("http://localhost:3000/signup", obj)
-      .then(res => {
-        console.log("done");
-      })
-      .catch(error => {
-        console.log(error);
-      });
   };
 
   return (

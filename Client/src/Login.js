@@ -3,7 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { navigate } from "@reach/router";
-import axios from "axios";
+
+import { authenticationService } from './_services';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -42,24 +43,16 @@ export default function Login() {
   };
 
   const handleSubmit = event => {
+
     event.preventDefault();
 
-    var obj = {
-      email: values.name,
-      password: values.password
-    };
+    authenticationService.login(values.name, values.password).then(res => {
+      authenticationService.setUser(res);
+      navigate("/employees");
+    }).catch(error => {
+      console.log(error);
+    });
 
-    axios
-      .post("http://localhost:3000/signin", obj)
-      .then(res => {
-        navigate("/employees");
-        localStorage.setItem("postlight-token", res.data.token);
-
-        console.log("done");
-      })
-      .catch(error => {
-        console.log(error);
-      });
   };
 
   return (
