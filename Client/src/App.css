@@ -1,6 +1,14 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+}
+
 .login-form {
   display: flex;
   align-content: center;
+  text-align: center;
 }
 
 

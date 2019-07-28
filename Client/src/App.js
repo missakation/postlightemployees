@@ -21,7 +21,9 @@ function App() {
   }
 
   useEffect(() => {
-    setCurrentUser(authenticationService.currentUser);
+    authenticationService.currentUser.subscribe(user => {
+      setCurrentUser(user);
+    });
   }, "");
 
   return (

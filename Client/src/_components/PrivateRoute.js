@@ -5,7 +5,7 @@ import { authenticationService } from '../_services';
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {
 
-    const currentUser = authenticationService.currentUser;
+    const currentUser = authenticationService.currentUserValue;
     if (!currentUser) {
         return <Redirect noThrow  to="/login" />
     }
