@@ -9,6 +9,9 @@ body {
   display: flex;
   align-content: center;
   text-align: center;
+  height: 80vh;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -25,8 +28,13 @@ body {
   color: white;
 }
 
+.app-header div{
+  display: flex;
+}
+
 .app-header a{
   font-size: 16px;
+  margin-right: 16px;
 }
 
 .header-title {

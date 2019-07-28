@@ -46,7 +46,6 @@ export default function Register() {
     event.preventDefault();
 
     authenticationService.register(values.name, values.password).then(res => {
-      authenticationService.setUser(res);
       navigate("/employees");
     }).catch(error => {
       console.log(error);
@@ -56,7 +55,11 @@ export default function Register() {
 
   return (
     <div className="login-form">
+
       <form className={classes.container} onSubmit={handleSubmit}>
+        <h4>
+          Register for a New Account!
+        </h4>
         <TextField
           id="username"
           label="Username"

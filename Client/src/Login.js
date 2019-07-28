@@ -55,6 +55,10 @@ export default function Login() {
 
   };
 
+  const openRegisterPage = event => {
+    navigate("/register");
+  }
+
   return (
     <div className="login-form">
 
@@ -88,7 +92,11 @@ export default function Login() {
         >
           Log in
         </Button>
+        <a onClick={openRegisterPage}>
+          Register
+        </a>
       </form>
+
     </div>
   );
 }

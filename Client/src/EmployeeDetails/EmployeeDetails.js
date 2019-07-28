@@ -176,7 +176,7 @@ export default function Employees(props) {
             color="primary"
             className={classes.button}
           >
-            Primary
+            Save
           </Button>
         </form>
       </div>

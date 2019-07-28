@@ -22,14 +22,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 
 //DIALOG IMPORTS
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-
-import axios from "axios";
 import { navigate } from "@reach/router";
+import { employeeService } from '../_services'
 
 const employeeStyles = makeStyles(theme => ({
   root: {
@@ -89,8 +83,8 @@ function TablePaginationActions(props) {
         {theme.direction === "rtl" ? (
           <KeyboardArrowRight />
         ) : (
-          <KeyboardArrowLeft />
-        )}
+            <KeyboardArrowLeft />
+          )}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
@@ -100,8 +94,8 @@ function TablePaginationActions(props) {
         {theme.direction === "rtl" ? (
           <KeyboardArrowLeft />
         ) : (
-          <KeyboardArrowRight />
-        )}
+            <KeyboardArrowRight />
+          )}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
@@ -124,7 +118,7 @@ TablePaginationActions.propTypes = {
 const useStyles2 = makeStyles(theme => ({
   root: {
     width: "100%",
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(1)
   },
   table: {
     minWidth: 500
@@ -136,42 +130,49 @@ const useStyles2 = makeStyles(theme => ({
 
 function Welcome(props) {
   const classes = useStyles2();
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(1);
+  const [countEmployees, setCountEmployees] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [employees, setEmployees] = useState([]);
-  const [searchCriteria, setsearchCriteria] = useState("");
+  const [searchCriteria, setSarchCriteria] = useState("");
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, employees.length - page * rowsPerPage);
 
   useEffect(() => {
-    getEmployees(1);
-  }, []);
+    getEmployees();
+  }, [searchCriteria, rowsPerPage]);
 
   function handleChangePage(event, newPage) {
-    getEmployees(newPage);
+    setPage(newPage);
+    getEmployees();
   }
 
   function handleChangeRowsPerPage(event) {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setPage(1);
+  }
+
+  function updateCriteria(event) {
+    setSarchCriteria(event.target.value);
   }
 
   function openAddEmployeePage(event) {
     navigate("/employees/create");
   }
 
-  function getEmployees(page) {
-    axios
-      .get("http://localhost:3000/api/employees", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("postlight-token")
-        }
-      })
-      .then(res => {
+  function getEmployees() {
+
+    employeeService.get(page, rowsPerPage, searchCriteria).then(res => {
+
+      if (res.data != null && res.data != undefined) {
         setEmployees(res.data.data);
-      })
-      .catch(error => {});
+        setCountEmployees(res.data.pages.count);
+      }
+
+
+    }).catch(error => { });
+
   }
 
   function editEmployee(employee) {
@@ -179,16 +180,11 @@ function Welcome(props) {
   }
 
   function deleteEmployee(employee) {
-    axios
-      .delete("http://localhost:3000/api/employees/" + employee._id, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("postlight-token")
-        }
-      })
-      .then(res => {
-        getEmployees(page);
-      })
-      .catch(error => {});
+
+    employeeService.delete(employee._id).then(res => {
+      getEmployees();
+    }).catch(error => { });
+
   }
 
   return (
@@ -199,6 +195,7 @@ function Welcome(props) {
           label="Search Employee"
           type="search"
           className={classes.textField}
+          onChange={updateCriteria}
           margin="normal"
           variant="outlined"
         />
@@ -244,14 +241,14 @@ function Welcome(props) {
                       onClick={() => {
                         editEmployee(row);
                       }}
-                      // onClick={handleFirstPageButtonClick}
+                    // onClick={handleFirstPageButtonClick}
                     >
                       <EditIcon />
                     </IconButton>
                     <IconButton
                       color="secondary"
                       onClick={() => deleteEmployee(row)}
-                      // onClick={handleFirstPageButtonClick}
+                    // onClick={handleFirstPageButtonClick}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -260,7 +257,7 @@ function Welcome(props) {
               ))}
 
               {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
+                <TableRow style={{ height: 0 * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -268,11 +265,11 @@ function Welcome(props) {
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[10, 25, 50]}
+                  rowsPerPageOptions={[5, 10, 20]}
                   colSpan={6}
-                  count={employees.length}
+                  count={countEmployees}
                   rowsPerPage={rowsPerPage}
-                  page={page}
+                  page={page-1}
                   SelectProps={{
                     inputProps: { "aria-label": "employees per page" },
                     native: true

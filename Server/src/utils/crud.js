@@ -22,25 +22,44 @@ export const getMany = model => async (req, res) => {
   try {
 
     var params = {};
+    var pageNumber = 1;
+    var rowsPerPage = 1000;
+    //params.createdBy = req.user._id;
 
-    params.createdBy = req.user._id;
+    pageNumber = req.query.hasOwnProperty('page') ? Number(req.query['page']) : 1;
+    rowsPerPage = req.query.hasOwnProperty('rowsPerPage') ? Number(req.query['rowsPerPage']) : 1000;
+
+    delete req.query.page;
+    delete req.query.rowsPerPage;
 
     //CREATE QUERY PARAMS OBJECTS
     if (req.query != undefined && req.query != null) {
       for (const [key, value] of Object.entries(req.query)) {
-        params[key] = value;
+        params[key] = new RegExp("^" + value);
       }
-
     }
 
     const docs = await model
-      .find()
+      .find(params)
+      .skip((pageNumber - 1) * rowsPerPage)
+      .limit(rowsPerPage)
       .lean()
       .exec()
 
-    // console.log(docs);
+    var count = await model
+      .find(params)
+      .count();
 
-    res.status(200).json({ data: docs })
+    res.status(200).json(
+      {
+        data: docs,
+        pages: {
+          count: count,
+          currentPage: pageNumber,
+          rowsPerPage: rowsPerPage
+        }
+      }
+    )
   } catch (e) {
     console.error(e)
     res.status(400).end()

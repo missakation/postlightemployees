@@ -19,6 +19,9 @@ function App() {
     authenticationService.logout();
     navigate('/login');
   }
+  function goHome() {
+    navigate('/employees');
+  }
 
   useEffect(() => {
     authenticationService.currentUser.subscribe(user => {
@@ -32,7 +35,11 @@ function App() {
       {currentUser &&
         <header className="app-header">
           <h6 className="header-title">Postlight Employees</h6>
-          <a onClick={logout} className="">Logout</a>
+          <div>
+            <a onClick={goHome}>Home</a>
+            <a onClick={logout}>Logout</a>
+          </div>
+
         </header>
       }
 
