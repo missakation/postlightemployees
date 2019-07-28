@@ -1,4 +1,4 @@
-.login-form{
+.login-form {
   display: flex;
   align-content: center;
 }
@@ -22,11 +22,11 @@
   color: white;
 }
 
-.page{
+.page {
   padding: 16px;
 }
 
-.header-title{
+.header-title {
   display: flex;
   margin: 0;
   font-size: 18px;
@@ -38,12 +38,12 @@
 }
 
 /* EMPLOYEE PAGE */
-.emp-sec-options{
+.emp-sec-options {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.ic-add{
+.ic-add {
   font-size: 30px;
 }
 

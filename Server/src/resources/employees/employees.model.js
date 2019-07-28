@@ -14,6 +14,24 @@ const listEmployees = new mongoose.Schema(
       trim: true,
       maxlength: 50
     },
+    city: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 50
+    },
+    address: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 50
+    },
+    department: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 50
+    },
     createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'user' //RELATION
