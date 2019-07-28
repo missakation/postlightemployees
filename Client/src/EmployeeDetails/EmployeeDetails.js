@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
+
+//MATERIAL UI
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Snackbar from '@material-ui/core/Snackbar';
+
 import { navigate } from "@reach/router";
+import { employeeService } from '../_services'
 import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
@@ -30,6 +35,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Employees(props) {
+
   const classes = useStyles();
 
   const [values, setValues] = React.useState({
@@ -45,8 +51,10 @@ export default function Employees(props) {
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
+  const [open, setOpen] = React.useState(false);
 
   const handleSubmit = event => {
+
     event.preventDefault();
 
     var obj = {
@@ -58,26 +66,18 @@ export default function Employees(props) {
     };
 
     if (isEditMode) {
-      axios
-        .put(`http://localhost:3000/api/employees/${props.employeeId}`, obj, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("postlight-token")
-          }
-        })
+      employeeService.update(props.employeeId, obj)
         .then(res => {
+          setOpen(true);
           navigate("/employees");
         })
         .catch(error => {
           console.log(error);
         });
     } else {
-      axios
-        .post("http://localhost:3000/api/employees", obj, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("postlight-token")
-          }
-        })
+      employeeService.create(obj)
         .then(res => {
+          setOpen(true);
           navigate("/employees");
         })
         .catch(error => {
@@ -98,19 +98,25 @@ export default function Employees(props) {
     };
   };
 
+  function handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  }
+
   useEffect(() => {
     var employeeId = props.employeeId;
     if (employeeId != null && employeeId != undefined) {
-      axios
-        .get("http://localhost:3000/api/employees/" + employeeId, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("postlight-token")
-          }
-        })
+
+      employeeService.getById(employeeId)
         .then(res => {
           setValues(res.data.data);
         })
-        .catch(error => {});
+        .catch(error => {
+          console.log(error);
+        });
     }
   }, []);
 
@@ -178,6 +184,19 @@ export default function Employees(props) {
           >
             Save
           </Button>
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            open={open}
+            autoHideDuration={2000}
+            onClose={handleClose}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">Employee Saved Successfully</span>}
+          />
         </form>
       </div>
     </div>

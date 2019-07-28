@@ -50,12 +50,12 @@ export const getMany = model => async (req, res) => {
       .find(params)
       .count();
 
-    res.status(200).json(
+    res.status(200).json( 
       {
         data: docs,
         pages: {
           count: count,
-          currentPage: pageNumber,
+          currentPage: pageNumber, 
           rowsPerPage: rowsPerPage
         }
       }

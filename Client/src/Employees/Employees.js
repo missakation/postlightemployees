@@ -181,7 +181,7 @@ function Welcome(props) {
 
   function deleteEmployee(employee) {
 
-    employeeService.delete(employee._id).then(res => {
+    employeeService.deleteById(employee._id).then(res => {
       getEmployees();
     }).catch(error => { });
 
@@ -225,7 +225,6 @@ function Welcome(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* {employees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => ( */}
               {employees.map(row => (
                 <TableRow key={row.name}>
                   <TableCell></TableCell>
@@ -241,14 +240,12 @@ function Welcome(props) {
                       onClick={() => {
                         editEmployee(row);
                       }}
-                    // onClick={handleFirstPageButtonClick}
                     >
                       <EditIcon />
                     </IconButton>
                     <IconButton
                       color="secondary"
                       onClick={() => deleteEmployee(row)}
-                    // onClick={handleFirstPageButtonClick}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -269,7 +266,7 @@ function Welcome(props) {
                   colSpan={6}
                   count={countEmployees}
                   rowsPerPage={rowsPerPage}
-                  page={page-1}
+                  page={page - 1}
                   SelectProps={{
                     inputProps: { "aria-label": "employees per page" },
                     native: true
