@@ -6,6 +6,7 @@ const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('
 export const authenticationService = {
     login,
     logout,
+    register,
     currentUser: currentUserSubject.asObservable(),
     get currentUserValue() { return currentUserSubject.value },
     setUser
