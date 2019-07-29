@@ -32,6 +32,12 @@ const listEmployees = new mongoose.Schema(
       trim: true,
       maxlength: 50
     },
+    mediaUrl: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 100
+    },
     createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'user' //RELATION

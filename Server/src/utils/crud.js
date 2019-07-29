@@ -50,12 +50,12 @@ export const getMany = model => async (req, res) => {
       .find(params)
       .count();
 
-    res.status(200).json( 
+    res.status(200).json(
       {
         data: docs,
         pages: {
           count: count,
-          currentPage: pageNumber, 
+          currentPage: pageNumber,
           rowsPerPage: rowsPerPage
         }
       }
@@ -67,8 +67,15 @@ export const getMany = model => async (req, res) => {
 }
 
 export const createOne = model => async (req, res) => {
+
   const createdBy = req.user._id
+
+  if (req.file) {
+    req.body.mediaUrl = req.file.path;
+  }
+
   try {
+
     console.log(req.body);
     const doc = await model.create({ ...req.body, createdBy })
     res.status(201).json({ data: doc })
