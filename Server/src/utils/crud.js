@@ -8,8 +8,6 @@ export const getOne = model => async (req, res) => {
       .lean()
       .exec()
 
-    console.log(doc);
-
     if (!doc) {
       return res.status(400).end()
     }

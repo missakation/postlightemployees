@@ -55,6 +55,7 @@ export default function Employees(props) {
     city: "",
     address: ""
   });
+
   const [imageUrl, setImageUrl] = useState(defaultPic); //PUT DETAULT URL FOR FUTURE CASE
   const [imageFile, setImageFile] = useState(null);
   const isEditMode = props.employeeId != undefined || props.employeeId != null;
@@ -62,6 +63,7 @@ export default function Employees(props) {
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
+
   const [open, setOpen] = React.useState(false);
   const [spacing, setSpacing] = React.useState(2);
 
@@ -77,26 +79,28 @@ export default function Employees(props) {
       address: values.address
     };
 
-    if (isEditMode) {
-      employeeService.update(props.employeeId, obj, imageFile)
-        .then(res => {
-          setOpen(true);
-          navigate("/employees");
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    } else {
-      employeeService.create(obj, imageFile)
-        .then(res => {
-          setOpen(true);
-          navigate("/employees");
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    if (validateObj && imageUrl != defaultPic) {
+      var apiRun = isEditMode ? employeeService.update(props.employeeId, obj, imageFile) : employeeService.create(obj, imageFile);
+      apiRun.then(res => {
+        setOpen(true);
+        navigate("/employees");
+      }).catch(error => {
+        console.log(error);
+      });
     }
+    else{
+      alert('Missing Fields');
+    }
+
   };
+
+  const validateObj = (obj) => {
+    return obj.name.trim() != '' &&
+      obj.jobtitle.trim() != '' &&
+      obj.department.trim() != '' &&
+      obj.city.trim() != '' &&
+      obj.address.trim() != '';
+  }
 
   const onChangeImage = e => {
 
@@ -203,7 +207,7 @@ export default function Employees(props) {
                 margin="normal"
               />
 
-              {/* <Snackbar
+              <Snackbar
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'left',
@@ -215,7 +219,7 @@ export default function Employees(props) {
                   'aria-describedby': 'message-id',
                 }}
                 message={<span id="message-id">Employee Saved Successfully</span>}
-              /> */}
+              />
 
             </div>
           </Grid>

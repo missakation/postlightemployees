@@ -21,7 +21,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 
-//DIALOG IMPORTS
 import { navigate } from "@reach/router";
 import { employeeService } from '../_services'
 
