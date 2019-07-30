@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import { navigate } from "@reach/router";
 import { employeeService } from '../_services'
 
+import defaultPic from '../assets/default.png'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -18,29 +19,28 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     flexGrow: 1,
+    marginLeft: theme.spacing(3),
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 400
-  },
-  dense: {
-    marginTop: 19
-  },
-  menu: {
-    width: 200
+    width: 400,
+    marginRight: theme.spacing(2),
   },
   button: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(3),
+    width: 120
   },
   sectionpic: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(3)
   },
   employeepic: {
     height: 200,
     width: 400,
     marginTop: theme.spacing(2),
     objectFit: "contain"
+  },
+  removeLink: {
+    marginTop: theme.spacing(1),
+    color: "Firebrick"
   }
 }));
 
@@ -55,7 +55,7 @@ export default function Employees(props) {
     city: "",
     address: ""
   });
-  const [imageUrl, setImageUrl] = useState(''); //PUT DETAULT URL FOR FUTURE CASE
+  const [imageUrl, setImageUrl] = useState(defaultPic); //PUT DETAULT URL FOR FUTURE CASE
   const [imageFile, setImageFile] = useState(null);
   const isEditMode = props.employeeId != undefined || props.employeeId != null;
 
@@ -78,7 +78,7 @@ export default function Employees(props) {
     };
 
     if (isEditMode) {
-      employeeService.update(props.employeeId, obj)
+      employeeService.update(props.employeeId, obj, imageFile)
         .then(res => {
           setOpen(true);
           navigate("/employees");
@@ -87,7 +87,7 @@ export default function Employees(props) {
           console.log(error);
         });
     } else {
-      employeeService.create(obj)
+      employeeService.create(obj, imageFile)
         .then(res => {
           setOpen(true);
           navigate("/employees");
@@ -130,6 +130,10 @@ export default function Employees(props) {
     setOpen(false);
   }
 
+  function removePic() {
+    setImageUrl(defaultPic);
+  }
+
   useEffect(() => {
     var employeeId = props.employeeId;
     if (employeeId != null && employeeId != undefined) {
@@ -137,6 +141,7 @@ export default function Employees(props) {
       employeeService.getById(employeeId)
         .then(res => {
           setValues(res.data.data);
+          setImageUrl(res.data.data.mediaUrlFull);
         })
         .catch(error => {
           console.log(error);
@@ -146,17 +151,17 @@ export default function Employees(props) {
 
   return (
     <div className="page">
+      <form
+        className={classes.container}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
+        <Grid container className={classes.root} spacing={2}>
+          <Grid item md={6} xs={12}>
+            <h4>Customer Details</h4>
+            <div className="frm-employee">
 
-      <Grid container className={classes.root} spacing={2}>
-        <Grid item md={6} xs={12}>
-          <h5>Customer Details</h5>
-          <div className="frm-employee">
-            <form
-              className={classes.container}
-              noValidate
-              autoComplete="off"
-              onSubmit={handleSubmit}
-            >
               <TextField
                 id="employee-name"
                 label="Name"
@@ -211,29 +216,34 @@ export default function Employees(props) {
                 }}
                 message={<span id="message-id">Employee Saved Successfully</span>}
               /> */}
-            </form>
-          </div>
-        </Grid>
-        <Grid item md={6} xs={12}>
-          <div className={classes.sectionpic}>
-            <h5>Profile Image</h5>
-            <input type="file" name="file" onChange={e => onChangeImage(e)} />
-            <div>
-              <img className={classes.employeepic} src={imageUrl}></img>
+
             </div>
-          </div>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <div>
+              <h4>Profile Image</h4>
+              <input type="file" name="file" onChange={e => onChangeImage(e)} />
+              {imageUrl != defaultPic && <div className={classes.removeLink}>
+                <a onClick={removePic} >
+                  Remove Picture
+            </a>
+              </div>}
+              <div>
+                <img className={classes.employeepic} src={imageUrl}></img>
+              </div>
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        className={classes.button}
-      >
-        Save
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className={classes.button}
+        >
+          Save
           </Button>
 
-
-    </div>
+      </form>
+    </div >
   );
 }

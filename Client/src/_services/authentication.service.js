@@ -1,3 +1,4 @@
+import { authHeader, apiUrl } from ".././_helpers"
 import axios from "axios";
 import { BehaviorSubject } from 'rxjs';
 
@@ -19,7 +20,7 @@ function login(email, password) {
         password: password
     }
 
-    return axios.post("http://localhost:3000/signin", body).then(user => {
+    return axios.post(apiUrl + "/signin", body).then(user => {
         currentUserSubject.next(user.data);
         return user;
     })
@@ -32,7 +33,7 @@ function register(email, password) {
         password: password
     }
 
-    return axios.post("http://localhost:3000/signup", body)
+    return axios.post(apiUrl + "/signup", body)
 }
 
 function setUser(user) {

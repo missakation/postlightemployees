@@ -1,3 +1,5 @@
+import config from '../config'
+
 export const getOne = model => async (req, res) => {
   try {
     const doc = await model
@@ -5,6 +7,8 @@ export const getOne = model => async (req, res) => {
       .findOne({ _id: req.params.id })
       .lean()
       .exec()
+
+    console.log(doc);
 
     if (!doc) {
       return res.status(400).end()
@@ -72,12 +76,13 @@ export const createOne = model => async (req, res) => {
 
   if (req.file) {
     req.body.mediaUrl = req.file.path;
+    req.body.mediaUrlFull = `http://localhost:${config.port}/` + req.file.path;
   }
 
   try {
 
-    console.log(req.body);
     const doc = await model.create({ ...req.body, createdBy })
+
     res.status(201).json({ data: doc })
   } catch (e) {
     console.error(e)
@@ -86,11 +91,17 @@ export const createOne = model => async (req, res) => {
 }
 
 export const updateOne = model => async (req, res) => {
+
+  if (req.file) {
+    req.body.mediaUrl = req.file.path;
+    req.body.mediaUrlFull = `http://localhost:${config.port}/` + req.file.path;
+  }
+
   try {
     const updatedDoc = await model
       .findOneAndUpdate(
         {
-          createdBy: req.user._id,
+          //createdBy: req.user._id,
           _id: req.params.id
         },
         req.body,

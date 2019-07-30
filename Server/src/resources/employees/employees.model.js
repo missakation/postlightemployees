@@ -34,7 +34,11 @@ const listEmployees = new mongoose.Schema(
     },
     mediaUrl: {
       type: String,
-      required: true,
+      trim: true,
+      maxlength: 100
+    },
+    mediaUrlFull: {
+      type: String,
       trim: true,
       maxlength: 100
     },

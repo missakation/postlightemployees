@@ -1,5 +1,4 @@
 import { getOne, getMany, createOne, updateOne, removeOne } from '../crud'
-import { List } from '../../resources/list/list.model'
 import mongoose from 'mongoose'
 
 describe('crud controllers', () => {

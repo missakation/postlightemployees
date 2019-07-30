@@ -1,5 +1,5 @@
+import { authHeader, apiUrl, authHeaderFormData } from ".././_helpers"
 import axios from "axios";
-import { authHeader, apiUrl } from ".././_helpers"
 
 export const employeeService =
 {
@@ -20,17 +20,48 @@ function deleteById(id) {
     return axios.delete(employeeUrl + '/' + id, authHeader())
 }
 
-function create(employee) {
-    return axios.post(employeeUrl, employee, authHeader())
+function create(employee, imageFile) {
+
+    var bodyFormData = buildFormData(employee, imageFile);
+
+    return axios({
+        method: 'post',
+        url: employeeUrl,
+        data: bodyFormData,
+        headers: authHeaderFormData()
+    });
 }
 
-function update(id, employee) {
-    return axios.put(employeeUrl + '/' + id, employee, authHeader())
+function update(id, employee, imageFile) {
+
+    var bodyFormData = buildFormData(employee, imageFile);
+
+    return axios({
+        method: 'put',
+        url: employeeUrl + '/' + id,
+        data: bodyFormData,
+        headers: authHeaderFormData()
+    });
 }
 
 function buildParams(page, rowsPerPage, criteria) {
     return "?page=" + page +
         "&rowsPerPage=" + rowsPerPage +
         "&name=" + criteria
+}
 
+function buildFormData(employee, imageFile) {
+
+    var bodyFormData = new FormData();
+    bodyFormData.set('name', employee.name);
+    bodyFormData.set('jobtitle', employee.jobtitle);
+    bodyFormData.set('city', employee.city);
+    bodyFormData.set('address', employee.address);
+    bodyFormData.set('department', employee.department);
+
+    if (imageFile != null && imageFile != undefined) {
+        bodyFormData.append('media', imageFile);
+    }
+
+    return bodyFormData;
 }

@@ -80,7 +80,7 @@ export const protect = async (req, res, next) => {
 
   const user = await User.findById(payload.id)
     .select('-password')
-    .lean() //CONVERT TO JAVASCRIP OBJECTS
+    .lean()
     .exec()
 
   if (!user) {

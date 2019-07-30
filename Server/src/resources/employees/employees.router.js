@@ -4,15 +4,15 @@ import multer from 'multer'
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './images/');
+    cb(null, './images/customers/');
   },
   filename: (req, file, cb) => {
-    console.log(file.originalname);
-    cb(null, file.originalname);
+    console.log(file);
+    cb(null, Date.now() + '-' + file.originalname);
   },
 })
 
-//GET ONLY IMAGES
+//GET ONLY IMAGES 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype == 'image/jpeg') {
     cb(null, true);

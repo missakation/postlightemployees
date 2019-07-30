@@ -5,6 +5,10 @@ body {
   height: 100%;
 }
 
+a{
+  cursor: pointer;
+}
+
 .login-form {
   display: flex;
   align-content: center;

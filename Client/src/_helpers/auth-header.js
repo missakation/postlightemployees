@@ -15,4 +15,18 @@ export function authHeader() {
     }
 }
 
+export function authHeaderFormData() {
+    // return authorization header with jwt token
+    const currentUser = authenticationService.currentUserValue;
+    if (currentUser && localStorage.getItem("postlight-token")) {
+        var header = {
+            'Authorization': "Bearer " + localStorage.getItem("postlight-token"),
+            'Content-Type': 'multipart/form-data'
+        };
+        return header;
+    } else {
+        return {};
+    }
+}
+
 export const apiUrl = "http://localhost:3000"
