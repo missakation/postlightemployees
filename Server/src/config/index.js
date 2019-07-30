@@ -6,6 +6,7 @@ const baseConfig = {
   isDev: env === 'development',
   isTest: env === 'testing',
   port: 3000,
+  uploadFolder: 'images',
   secrets: {
     jwt: process.env.JWT_SECRET,
     jwtExp: '15d' //Expires in 15 days

@@ -26,6 +26,8 @@ app.use('/api/user', userRouter)
 app.use('/api/list', listRouter)
 app.use('/api/employees', employeesRouter)
 
+app.use('/images', express.static('images'));
+
 export const start = async () => {
   try {
     await connect()
