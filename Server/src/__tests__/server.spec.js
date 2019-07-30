@@ -13,7 +13,7 @@ describe('API Authentication:', () => {
 
   describe('api auth', () => {
     test('api should be locked down', async () => {
-      let response = await request(app).get('/api/item')
+      let response = await request(app).get('/api/employees')
       expect(response.statusCode).toBe(401)
 
       response = await request(app).get('/api/list')

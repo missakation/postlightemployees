@@ -30,8 +30,7 @@ describe('employees model', () => {
       const createdBy = List.schema.obj.createdBy
       expect(createdBy).toEqual({
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'user',
-        required: true
+        ref: 'user'
       })
     })
 
