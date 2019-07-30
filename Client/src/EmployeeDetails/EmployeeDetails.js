@@ -5,15 +5,19 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Snackbar from '@material-ui/core/Snackbar';
+import Grid from '@material-ui/core/Grid';
 
 import { navigate } from "@reach/router";
 import { employeeService } from '../_services'
-import axios from "axios";
+
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: "flex",
     flexDirection: "column"
+  },
+  root: {
+    flexGrow: 1,
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -31,6 +35,12 @@ const useStyles = makeStyles(theme => ({
   },
   sectionpic: {
     margin: theme.spacing(1)
+  },
+  employeepic: {
+    height: 200,
+    width: 400,
+    marginTop: theme.spacing(2),
+    objectFit: "contain"
   }
 }));
 
@@ -45,13 +55,15 @@ export default function Employees(props) {
     city: "",
     address: ""
   });
-
+  const [imageUrl, setImageUrl] = useState(''); //PUT DETAULT URL FOR FUTURE CASE
+  const [imageFile, setImageFile] = useState(null);
   const isEditMode = props.employeeId != undefined || props.employeeId != null;
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
   const [open, setOpen] = React.useState(false);
+  const [spacing, setSpacing] = React.useState(2);
 
   const handleSubmit = event => {
 
@@ -87,15 +99,27 @@ export default function Employees(props) {
   };
 
   const onChangeImage = e => {
-    let files = e.target.files;
-    let reader = new FileReader();
-    reader.readAsDataURL(files[0]);
 
-    reader.onload = e => {
-      const formData = {
-        file: e.target.result
-      };
-    };
+    let files = e.target.files;
+
+    if (files.length > 0) {
+
+      setImageFile(files[0]);
+
+      let arr = e.target.files[0].name.split('.');
+      let FileExtension = arr[arr.length - 1].toLowerCase();
+      let isExtensionValid = FileExtension == "png" || FileExtension == "jpg" || FileExtension == "jpeg";
+      if (isExtensionValid) {
+        let reader = new FileReader();
+        reader.readAsDataURL(files[0]);
+
+        reader.onload = e => {
+          setImageUrl(e.target.result);
+        };
+      }
+
+    }
+
   };
 
   function handleClose(event, reason) {
@@ -122,83 +146,94 @@ export default function Employees(props) {
 
   return (
     <div className="page">
-      <h5>Customer Details</h5>
-      <div className="frm-employee">
-        <form
-          className={classes.container}
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit}
-        >
-          <TextField
-            id="employee-name"
-            label="Name"
-            className={classes.textField}
-            value={values.name}
-            onChange={handleChange("name")}
-            margin="normal"
-          />
-          <TextField
-            id="employee-jobtitle"
-            label="Job Title"
-            className={classes.textField}
-            value={values.jobtitle}
-            onChange={handleChange("jobtitle")}
-            margin="normal"
-          />
-          <TextField
-            id="employee-department"
-            label="Department"
-            className={classes.textField}
-            value={values.department}
-            onChange={handleChange("department")}
-            margin="normal"
-          />
-          <TextField
-            id="employee-city"
-            label="City"
-            className={classes.textField}
-            value={values.city}
-            onChange={handleChange("city")}
-            margin="normal"
-          />
-          <TextField
-            id="employee-address"
-            label="Address"
-            className={classes.textField}
-            value={values.address}
-            onChange={handleChange("address")}
-            margin="normal"
-          />
 
+      <Grid container className={classes.root} spacing={2}>
+        <Grid item md={6} xs={12}>
+          <h5>Customer Details</h5>
+          <div className="frm-employee">
+            <form
+              className={classes.container}
+              noValidate
+              autoComplete="off"
+              onSubmit={handleSubmit}
+            >
+              <TextField
+                id="employee-name"
+                label="Name"
+                className={classes.textField}
+                value={values.name}
+                onChange={handleChange("name")}
+                margin="normal"
+              />
+              <TextField
+                id="employee-jobtitle"
+                label="Job Title"
+                className={classes.textField}
+                value={values.jobtitle}
+                onChange={handleChange("jobtitle")}
+                margin="normal"
+              />
+              <TextField
+                id="employee-department"
+                label="Department"
+                className={classes.textField}
+                value={values.department}
+                onChange={handleChange("department")}
+                margin="normal"
+              />
+              <TextField
+                id="employee-city"
+                label="City"
+                className={classes.textField}
+                value={values.city}
+                onChange={handleChange("city")}
+                margin="normal"
+              />
+              <TextField
+                id="employee-address"
+                label="Address"
+                className={classes.textField}
+                value={values.address}
+                onChange={handleChange("address")}
+                margin="normal"
+              />
+
+              {/* <Snackbar
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                open={open}
+                autoHideDuration={2000}
+                onClose={handleClose}
+                ContentProps={{
+                  'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">Employee Saved Successfully</span>}
+              /> */}
+            </form>
+          </div>
+        </Grid>
+        <Grid item md={6} xs={12}>
           <div className={classes.sectionpic}>
             <h5>Profile Image</h5>
             <input type="file" name="file" onChange={e => onChangeImage(e)} />
+            <div>
+              <img className={classes.employeepic} src={imageUrl}></img>
+            </div>
           </div>
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            Save
+        </Grid>
+      </Grid>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        className={classes.button}
+      >
+        Save
           </Button>
-          <Snackbar
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            open={open}
-            autoHideDuration={2000}
-            onClose={handleClose}
-            ContentProps={{
-              'aria-describedby': 'message-id',
-            }}
-            message={<span id="message-id">Employee Saved Successfully</span>}
-          />
-        </form>
-      </div>
+
+
     </div>
   );
 }

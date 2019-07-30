@@ -141,11 +141,10 @@ function Welcome(props) {
 
   useEffect(() => {
     getEmployees();
-  }, [searchCriteria, rowsPerPage]);
+  }, [searchCriteria, rowsPerPage, page]);
 
   function handleChangePage(event, newPage) {
-    setPage(newPage);
-    getEmployees();
+    setPage(newPage + 1);
   }
 
   function handleChangeRowsPerPage(event) {
@@ -166,6 +165,7 @@ function Welcome(props) {
     employeeService.get(page, rowsPerPage, searchCriteria).then(res => {
 
       if (res.data != null && res.data != undefined) {
+        //UPDATE PAGE NUMBERS
         setEmployees(res.data.data);
         setCountEmployees(res.data.pages.count);
       }
