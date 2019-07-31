@@ -9,7 +9,14 @@ import { authenticationService } from "./_services";
 const useStyles = makeStyles(theme => ({
   container: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    paddingTop:50,
+    paddingBottom:50,
+    paddingLeft:30,
+    paddingRight:30,
+    borderStyle:'solid',
+    borderWidth:1,
+    borderColor:'lightgrey'
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -28,15 +35,20 @@ const useStyles = makeStyles(theme => ({
   },
   sectionpic: {
     margin: theme.spacing(1)
+  },
+  error:{
+    color:'firebrick'
   }
 }));
 
 export default function Login() {
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    name: "missak",
-    password: "missak"
+    name: "",
+    password: ""
   });
+  const [hasError, setError] = React.useState(null);
+
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
@@ -52,7 +64,7 @@ export default function Login() {
         navigate("/employees");
       })
       .catch(error => {
-        console.log(error);
+        setError(error.message)
       });
   };
 
@@ -63,7 +75,8 @@ export default function Login() {
   return (
     <div className="login-form">
       <form className={classes.container} onSubmit={handleSubmit}>
-        <h3>Postlight</h3>
+        <h2>Postlight</h2>
+
         <TextField
           id="username"
           label="Username"
@@ -91,6 +104,7 @@ export default function Login() {
           Log in
         </Button>
         <a onClick={openRegisterPage}>Register</a>
+        {hasError && <h4 className={classes.error}>Invalid Credentials</h4>}
       </form>
     </div>
   );

@@ -21,6 +21,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+
 import { navigate } from "@reach/router";
 import { employeeService } from "../_services";
 
@@ -43,6 +49,12 @@ const employeeStyles = makeStyles(theme => ({
     fontSize: 20
   }
 }));
+
+
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function TablePaginationActions(props) {
   const classes = employeeStyles();
@@ -82,8 +94,8 @@ function TablePaginationActions(props) {
         {theme.direction === "rtl" ? (
           <KeyboardArrowRight />
         ) : (
-          <KeyboardArrowLeft />
-        )}
+            <KeyboardArrowLeft />
+          )}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
@@ -93,8 +105,8 @@ function TablePaginationActions(props) {
         {theme.direction === "rtl" ? (
           <KeyboardArrowLeft />
         ) : (
-          <KeyboardArrowRight />
-        )}
+            <KeyboardArrowRight />
+          )}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
@@ -135,12 +147,22 @@ function Welcome(props) {
   const [employees, setEmployees] = useState([]);
   const [searchCriteria, setSarchCriteria] = useState("");
 
+  const [openDiagram, setOpenDiagram] = React.useState(false);
+
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, employees.length - page * rowsPerPage);
 
   useEffect(() => {
     getEmployees();
   }, [searchCriteria, rowsPerPage, page]);
+
+  function handleClickOpen() {
+    setOpenDiagram(true);
+  }
+
+  function handleClose() {
+    setOpenDiagram(false);
+  }
 
   function handleChangePage(event, newPage) {
     setPage(newPage + 1);
@@ -169,7 +191,7 @@ function Welcome(props) {
           setCountEmployees(res.data.pages.count);
         }
       })
-      .catch(error => {});
+      .catch(error => { });
   }
 
   function editEmployee(employee) {
@@ -182,7 +204,7 @@ function Welcome(props) {
       .then(res => {
         getEmployees();
       })
-      .catch(error => {});
+      .catch(error => { });
   }
 
   return (
@@ -243,11 +265,31 @@ function Welcome(props) {
                     </IconButton>
                     <IconButton
                       color="secondary"
-                      onClick={() => deleteEmployee(row)}
+                      onClick={() => { handleClickOpen() }}
                     >
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
+                  <Dialog
+                    open={openDiagram}
+                    onClose={handleClose}
+                    TransitionComponent={Transition}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete the customer?"}</DialogTitle>
+                    <DialogContent>
+                      The action cannot be reversed
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose} color="primary">
+                        No
+                    </Button>
+                      <Button onClick={() => deleteEmployee(row)} color="primary" autoFocus>
+                        Yes
+                  </Button>
+                    </DialogActions>
+                  </Dialog>
                 </TableRow>
               ))}
 

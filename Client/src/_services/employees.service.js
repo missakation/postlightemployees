@@ -53,6 +53,7 @@ function buildParams(page, rowsPerPage, criteria) {
 }
 
 function buildFormData(employee, imageFile) {
+  
   var bodyFormData = new FormData();
   bodyFormData.set("name", employee.name);
   bodyFormData.set("jobtitle", employee.jobtitle);

@@ -8,7 +8,14 @@ import { navigate } from "@reach/router";
 const useStyles = makeStyles(theme => ({
   container: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    paddingTop:50,
+    paddingBottom:50,
+    paddingLeft:30,
+    paddingRight:30,
+    borderStyle:'solid',
+    borderWidth:1,
+    borderColor:'lightgrey'
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -31,6 +38,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Register() {
+
   const classes = useStyles();
   const [values, setValues] = React.useState({
     name: "",
@@ -43,10 +51,9 @@ export default function Register() {
 
   const handleSubmit = event => {
     event.preventDefault();
-
-    authenticationService
-      .register(values.name, values.password)
+    authenticationService.register(values.name, values.password)
       .then(res => {
+        authenticationService.setUser(res);
         navigate("/employees");
       })
       .catch(error => {
@@ -54,10 +61,14 @@ export default function Register() {
       });
   };
 
+  const openLoginPage = () => {
+    navigate("/login");
+  }
+
   return (
     <div className="login-form">
       <form className={classes.container} onSubmit={handleSubmit}>
-        <h4>Register for a New Account!</h4>
+      <h2>Postlight</h2>
         <TextField
           id="username"
           label="Username"
@@ -84,6 +95,9 @@ export default function Register() {
         >
           Register
         </Button>
+
+        <a onClick={openLoginPage}>Already have an account?</a>
+
       </form>
     </div>
   );

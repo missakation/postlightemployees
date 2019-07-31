@@ -35,7 +35,10 @@ function register(email, password) {
     password: password
   };
 
-  return axios.post(apiUrl + "/signup", body);
+  return axios.post(apiUrl + "/signup", body).then(user => {
+    currentUserSubject.next(user.data);
+    return user;
+  });;
 }
 
 function setUser(user) {
