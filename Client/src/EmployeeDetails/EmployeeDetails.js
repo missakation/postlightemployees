@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Snackbar from "@material-ui/core/Snackbar";
 import Grid from "@material-ui/core/Grid";
 
 import { navigate } from "@reach/router";
@@ -63,9 +62,6 @@ export default function Employees(props) {
     setValues({ ...values, [name]: event.target.value });
   };
 
-  const [open, setOpen] = React.useState(false);
-  const [spacing, setSpacing] = React.useState(2);
-
   const handleSubmit = event => {
     event.preventDefault();
 
@@ -83,7 +79,6 @@ export default function Employees(props) {
         : employeeService.create(obj, imageFile);
       apiRun
         .then(res => {
-          setOpen(true);
           navigate("/employees");
         })
         .catch(error => {
@@ -126,14 +121,6 @@ export default function Employees(props) {
       }
     }
   };
-
-  function handleClose(event, reason) {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  }
 
   function removePic() {
     setImageUrl(defaultPic);
@@ -205,22 +192,6 @@ export default function Employees(props) {
                 value={values.address}
                 onChange={handleChange("address")}
                 margin="normal"
-              />
-
-              <Snackbar
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left"
-                }}
-                open={open}
-                autoHideDuration={2000}
-                onClose={handleClose}
-                ContentProps={{
-                  "aria-describedby": "message-id"
-                }}
-                message={
-                  <span id="message-id">Employee Saved Successfully</span>
-                }
               />
             </div>
           </Grid>

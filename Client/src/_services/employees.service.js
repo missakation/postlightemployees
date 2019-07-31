@@ -1,4 +1,4 @@
-import { authHeader, apiUrl, authHeaderFormData } from ".././_helpers";
+import { authHeader, apiUrl, authHeaderFormData } from "../_helpers";
 import axios from "axios";
 
 export const employeeService = {

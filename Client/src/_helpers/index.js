@@ -1,1 +1,1 @@
-export * from "./auth-header";
+export * from "./Auth-header";
