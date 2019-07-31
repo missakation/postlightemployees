@@ -10,6 +10,19 @@
     "axios": "^0.19.0",
     "formik": "^1.5.8",
     "multer": "^1.4.2",
+    "prettier": "^1.18.2",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.12.1",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-jsx-a11y": "^6.2.0",
+    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react-hooks": "^1.0.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
@@ -19,7 +32,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --write \"src/**/*.{js,jsx}\"",
+    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -36,7 +51,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "prettier": "^1.18.2"
-  }
+  "devDependencies": {}
 }

@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { navigate } from "@reach/router";
 
-import { authenticationService } from './_services';
+import { authenticationService } from "./_services";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -43,29 +43,27 @@ export default function Login() {
   };
 
   const handleSubmit = event => {
-
     event.preventDefault();
 
-    authenticationService.login(values.name, values.password).then(res => {
-      authenticationService.setUser(res);
-      navigate("/employees");
-    }).catch(error => {
-      console.log(error);
-    });
-
+    authenticationService
+      .login(values.name, values.password)
+      .then(res => {
+        authenticationService.setUser(res);
+        navigate("/employees");
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   const openRegisterPage = event => {
     navigate("/register");
-  }
+  };
 
   return (
     <div className="login-form">
-
       <form className={classes.container} onSubmit={handleSubmit}>
-        <h3>
-          Postlight
-        </h3>
+        <h3>Postlight</h3>
         <TextField
           id="username"
           label="Username"
@@ -92,11 +90,8 @@ export default function Login() {
         >
           Log in
         </Button>
-        <a onClick={openRegisterPage}>
-          Register
-        </a>
+        <a onClick={openRegisterPage}>Register</a>
       </form>
-
     </div>
   );
 }

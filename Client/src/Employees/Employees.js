@@ -22,7 +22,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 
 import { navigate } from "@reach/router";
-import { employeeService } from '../_services'
+import { employeeService } from "../_services";
 
 const employeeStyles = makeStyles(theme => ({
   root: {
@@ -82,8 +82,8 @@ function TablePaginationActions(props) {
         {theme.direction === "rtl" ? (
           <KeyboardArrowRight />
         ) : (
-            <KeyboardArrowLeft />
-          )}
+          <KeyboardArrowLeft />
+        )}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
@@ -93,8 +93,8 @@ function TablePaginationActions(props) {
         {theme.direction === "rtl" ? (
           <KeyboardArrowLeft />
         ) : (
-            <KeyboardArrowRight />
-          )}
+          <KeyboardArrowRight />
+        )}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
@@ -160,18 +160,16 @@ function Welcome(props) {
   }
 
   function getEmployees() {
-
-    employeeService.get(page, rowsPerPage, searchCriteria).then(res => {
-
-      if (res.data != null && res.data != undefined) {
-        //UPDATE PAGE NUMBERS
-        setEmployees(res.data.data);
-        setCountEmployees(res.data.pages.count);
-      }
-
-
-    }).catch(error => { });
-
+    employeeService
+      .get(page, rowsPerPage, searchCriteria)
+      .then(res => {
+        if (res.data != null && res.data != undefined) {
+          //UPDATE PAGE NUMBERS
+          setEmployees(res.data.data);
+          setCountEmployees(res.data.pages.count);
+        }
+      })
+      .catch(error => {});
   }
 
   function editEmployee(employee) {
@@ -179,11 +177,12 @@ function Welcome(props) {
   }
 
   function deleteEmployee(employee) {
-
-    employeeService.deleteById(employee._id).then(res => {
-      getEmployees();
-    }).catch(error => { });
-
+    employeeService
+      .deleteById(employee._id)
+      .then(res => {
+        getEmployees();
+      })
+      .catch(error => {});
   }
 
   return (

@@ -4,13 +4,13 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Snackbar from '@material-ui/core/Snackbar';
-import Grid from '@material-ui/core/Grid';
+import Snackbar from "@material-ui/core/Snackbar";
+import Grid from "@material-ui/core/Grid";
 
 import { navigate } from "@reach/router";
-import { employeeService } from '../_services'
+import { employeeService } from "../_services";
 
-import defaultPic from '../assets/default.png'
+import defaultPic from "../assets/default.png";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -19,11 +19,11 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     flexGrow: 1,
-    marginLeft: theme.spacing(3),
+    marginLeft: theme.spacing(3)
   },
   textField: {
     width: 400,
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(2)
   },
   button: {
     margin: theme.spacing(3),
@@ -45,7 +45,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Employees(props) {
-
   const classes = useStyles();
 
   const [values, setValues] = React.useState({
@@ -68,7 +67,6 @@ export default function Employees(props) {
   const [spacing, setSpacing] = React.useState(2);
 
   const handleSubmit = event => {
-
     event.preventDefault();
 
     var obj = {
@@ -80,39 +78,44 @@ export default function Employees(props) {
     };
 
     if (validateObj && imageUrl != defaultPic) {
-      var apiRun = isEditMode ? employeeService.update(props.employeeId, obj, imageFile) : employeeService.create(obj, imageFile);
-      apiRun.then(res => {
-        setOpen(true);
-        navigate("/employees");
-      }).catch(error => {
-        console.log(error);
-      });
+      var apiRun = isEditMode
+        ? employeeService.update(props.employeeId, obj, imageFile)
+        : employeeService.create(obj, imageFile);
+      apiRun
+        .then(res => {
+          setOpen(true);
+          navigate("/employees");
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else {
+      alert("Missing Fields");
     }
-    else{
-      alert('Missing Fields');
-    }
-
   };
 
-  const validateObj = (obj) => {
-    return obj.name.trim() != '' &&
-      obj.jobtitle.trim() != '' &&
-      obj.department.trim() != '' &&
-      obj.city.trim() != '' &&
-      obj.address.trim() != '';
-  }
+  const validateObj = obj => {
+    return (
+      obj.name.trim() != "" &&
+      obj.jobtitle.trim() != "" &&
+      obj.department.trim() != "" &&
+      obj.city.trim() != "" &&
+      obj.address.trim() != ""
+    );
+  };
 
   const onChangeImage = e => {
-
     let files = e.target.files;
 
     if (files.length > 0) {
-
       setImageFile(files[0]);
 
-      let arr = e.target.files[0].name.split('.');
+      let arr = e.target.files[0].name.split(".");
       let FileExtension = arr[arr.length - 1].toLowerCase();
-      let isExtensionValid = FileExtension == "png" || FileExtension == "jpg" || FileExtension == "jpeg";
+      let isExtensionValid =
+        FileExtension == "png" ||
+        FileExtension == "jpg" ||
+        FileExtension == "jpeg";
       if (isExtensionValid) {
         let reader = new FileReader();
         reader.readAsDataURL(files[0]);
@@ -121,13 +124,11 @@ export default function Employees(props) {
           setImageUrl(e.target.result);
         };
       }
-
     }
-
   };
 
   function handleClose(event, reason) {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -141,8 +142,8 @@ export default function Employees(props) {
   useEffect(() => {
     var employeeId = props.employeeId;
     if (employeeId != null && employeeId != undefined) {
-
-      employeeService.getById(employeeId)
+      employeeService
+        .getById(employeeId)
         .then(res => {
           setValues(res.data.data);
           setImageUrl(res.data.data.mediaUrlFull);
@@ -165,7 +166,6 @@ export default function Employees(props) {
           <Grid item md={6} xs={12}>
             <h4>Customer Details</h4>
             <div className="frm-employee">
-
               <TextField
                 id="employee-name"
                 label="Name"
@@ -209,29 +209,30 @@ export default function Employees(props) {
 
               <Snackbar
                 anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
+                  vertical: "bottom",
+                  horizontal: "left"
                 }}
                 open={open}
                 autoHideDuration={2000}
                 onClose={handleClose}
                 ContentProps={{
-                  'aria-describedby': 'message-id',
+                  "aria-describedby": "message-id"
                 }}
-                message={<span id="message-id">Employee Saved Successfully</span>}
+                message={
+                  <span id="message-id">Employee Saved Successfully</span>
+                }
               />
-
             </div>
           </Grid>
           <Grid item md={6} xs={12}>
             <div>
               <h4>Profile Image</h4>
               <input type="file" name="file" onChange={e => onChangeImage(e)} />
-              {imageUrl != defaultPic && <div className={classes.removeLink}>
-                <a onClick={removePic} >
-                  Remove Picture
-            </a>
-              </div>}
+              {imageUrl != defaultPic && (
+                <div className={classes.removeLink}>
+                  <a onClick={removePic}>Remove Picture</a>
+                </div>
+              )}
               <div>
                 <img className={classes.employeepic} src={imageUrl}></img>
               </div>
@@ -245,9 +246,8 @@ export default function Employees(props) {
           className={classes.button}
         >
           Save
-          </Button>
-
+        </Button>
       </form>
-    </div >
+    </div>
   );
 }
