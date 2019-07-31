@@ -3,7 +3,6 @@ import cuid from 'cuid'
 import _ from 'lodash'
 
 import { User } from './src/resources/user/user.model'
-import { listEmployees } from './src/resources/employees/employees.model'
 
 const models = { User }
 

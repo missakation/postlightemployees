@@ -53,4 +53,4 @@ const listEmployees = new mongoose.Schema(
 //CREAT INDEX FOR NAME FIELD
 listEmployees.index({ name: 1 }, { unique: true })
 
-export const List = mongoose.model('employees', listEmployees)
+export const Employees = mongoose.model('employees', listEmployees)

@@ -1,5 +1,4 @@
 import config from '../config'
-
 export const getOne = model => async (req, res) => {
   try {
     const doc = await model
@@ -28,14 +27,15 @@ export const getMany = model => async (req, res) => {
     var rowsPerPage = 1000;
     //params.createdBy = req.user._id;
 
-    pageNumber = req.query.hasOwnProperty('page') ? Number(req.query['page']) : 1;
-    rowsPerPage = req.query.hasOwnProperty('rowsPerPage') ? Number(req.query['rowsPerPage']) : 1000;
-
-    delete req.query.page;
-    delete req.query.rowsPerPage;
-
     //CREATE QUERY PARAMS OBJECTS
     if (req.query != undefined && req.query != null) {
+
+      pageNumber = req.query.hasOwnProperty('page') ? Number(req.query['page']) : 1;
+      rowsPerPage = req.query.hasOwnProperty('rowsPerPage') ? Number(req.query['rowsPerPage']) : 1000;
+
+      delete req.query.page;
+      delete req.query.rowsPerPage;
+
       for (const [key, value] of Object.entries(req.query)) {
         params[key] = new RegExp("^" + value);
       }
@@ -63,8 +63,9 @@ export const getMany = model => async (req, res) => {
       }
     )
   } catch (e) {
-    console.error(e)
-    res.status(400).end()
+
+    //res.status(400).send(e)()
+    res.status(400);
   }
 }
 

@@ -1,5 +1,7 @@
-import { getOne, getMany, createOne, updateOne, removeOne } from '../crud'
+import { getOne, createOne, updateOne, removeOne } from '../crud'
+import { Employees } from '../../resources/employees/employees.model';
 import mongoose from 'mongoose'
+
 
 describe('crud controllers', () => {
   describe('getOne', async () => {
@@ -7,7 +9,15 @@ describe('crud controllers', () => {
       expect.assertions(2)
 
       const user = mongoose.Types.ObjectId()
-      const list = await List.create({ name: 'list', createdBy: user })
+      const list = await Employees.create(
+        {
+          name: 'Missak',
+          jobtitle: 'Programmer',
+          department: 'Tech',
+          city: 'Beirut',
+          address: 'Bourj Hammoud',
+          createdBy: user
+        })
 
       const req = {
         params: {
@@ -28,7 +38,7 @@ describe('crud controllers', () => {
         }
       }
 
-      await getOne(List)(req, res)
+      await getOne(Employees)(req, res)
     })
 
     test('404 if no doc was found', async () => {
@@ -55,39 +65,7 @@ describe('crud controllers', () => {
         }
       }
 
-      await getOne(List)(req, res)
-    })
-  })
-
-  describe('getMany', () => {
-    test('finds array of docs by authenticated user', async () => {
-      expect.assertions(4)
-
-      const user = mongoose.Types.ObjectId()
-      await List.create([
-        { name: 'list', createdBy: user },
-        { name: 'other', createdBy: user },
-        { name: 'list', createdBy: mongoose.Types.ObjectId() }
-      ])
-
-      const req = {
-        user: {
-          _id: user
-        }
-      }
-
-      const res = {
-        status(status) {
-          expect(status).toBe(200)
-          return this
-        },
-        json(result) {
-          expect(result.data).toHaveLength(2)
-          result.data.forEach(doc => expect(`${doc.createdBy}`).toBe(`${user}`))
-        }
-      }
-
-      await getMany(List)(req, res)
+      await getOne(Employees)(req, res)
     })
   })
 
@@ -96,7 +74,14 @@ describe('crud controllers', () => {
       expect.assertions(2)
 
       const user = mongoose.Types.ObjectId()
-      const body = { name: 'name' }
+      const body = {
+        name: 'Missak',
+        jobtitle: 'Programmer',
+        department: 'Tech',
+        city: 'Beirut',
+        address: 'Bourj Hammoud',
+        createdBy: user
+      }
 
       const req = {
         user: { _id: user },
@@ -113,14 +98,21 @@ describe('crud controllers', () => {
         }
       }
 
-      await createOne(List)(req, res)
+      await createOne(Employees)(req, res)
     })
 
     test('createdBy should be the authenticated user', async () => {
       expect.assertions(2)
 
       const user = mongoose.Types.ObjectId()
-      const body = { name: 'name' }
+      const body = {
+        name: 'Missak',
+        jobtitle: 'Programmer',
+        department: 'Tech',
+        city: 'Beirut',
+        address: 'Bourj Hammoud',
+        createdBy: user
+      }
 
       const req = {
         user: { _id: user },
@@ -137,7 +129,7 @@ describe('crud controllers', () => {
         }
       }
 
-      await createOne(List)(req, res)
+      await createOne(Employees)(req, res)
     })
   })
 
@@ -146,8 +138,16 @@ describe('crud controllers', () => {
       expect.assertions(3)
 
       const user = mongoose.Types.ObjectId()
-      const list = await List.create({ name: 'name', createdBy: user })
-      const update = { name: 'hello' }
+      const list = await Employees.create(
+        {
+          name: 'Missak',
+          jobtitle: 'Programmer',
+          department: 'Tech',
+          city: 'Beirut',
+          address: 'Bourj Hammoud',
+          createdBy: user
+        })
+      const update = { name: 'Missakation' }
 
       const req = {
         params: { id: list._id },
@@ -166,14 +166,21 @@ describe('crud controllers', () => {
         }
       }
 
-      await updateOne(List)(req, res)
+      await updateOne(Employees)(req, res)
     })
 
     test('400 if no doc', async () => {
       expect.assertions(2)
 
       const user = mongoose.Types.ObjectId()
-      const update = { name: 'hello' }
+      const update = {
+        name: 'Missak',
+        jobtitle: 'Programmer',
+        department: 'Tech',
+        city: 'Beirut',
+        address: 'Bourj Hammoud',
+        createdBy: user
+      }
 
       const req = {
         params: { id: mongoose.Types.ObjectId() },
@@ -191,7 +198,7 @@ describe('crud controllers', () => {
         }
       }
 
-      await updateOne(List)(req, res)
+      await updateOne(Employees)(req, res)
     })
   })
 
@@ -200,7 +207,15 @@ describe('crud controllers', () => {
       expect.assertions(2)
 
       const user = mongoose.Types.ObjectId()
-      const list = await List.create({ name: 'name', createdBy: user })
+      const list = await Employees.create(
+        {
+          name: 'Missak',
+          jobtitle: 'Programmer',
+          department: 'Tech',
+          city: 'Beirut',
+          address: 'Bourj Hammoud',
+          createdBy: user
+        })
 
       const req = {
         params: { id: list._id },
@@ -217,7 +232,7 @@ describe('crud controllers', () => {
         }
       }
 
-      await removeOne(List)(req, res)
+      await removeOne(Employees)(req, res)
     })
 
     test('400 if no doc', async () => {
@@ -239,7 +254,7 @@ describe('crud controllers', () => {
         }
       }
 
-      await removeOne(List)(req, res)
+      await removeOne(Employees)(req, res)
     })
   })
 })
