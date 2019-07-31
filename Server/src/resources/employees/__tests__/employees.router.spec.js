@@ -3,6 +3,7 @@ import router from '../employees.router'
 //TEST THE ROUTING
 describe('employees router', () => {
   test('has crud routes', () => {
+    
     const routes = [
       { path: '/', method: 'get' },
       { path: '/:id', method: 'get' },
@@ -11,7 +12,11 @@ describe('employees router', () => {
       { path: '/', method: 'post' }
     ]
 
+    console.log('test');
+    console.log(routes);
+
     routes.forEach(route => {
+      
       const match = router.stack.find(
         s => s.route.path === route.path && s.route.methods[route.method]
       )

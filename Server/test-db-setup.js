@@ -2,11 +2,10 @@ import mongoose from 'mongoose'
 import cuid from 'cuid'
 import _ from 'lodash'
 
-import { List } from './src/resources/list/list.model'
 import { User } from './src/resources/user/user.model'
 import { listEmployees } from './src/resources/employees/employees.model'
 
-const models = { User, List }
+const models = { User }
 
 const url =
   process.env.MONGODB_URI ||
@@ -29,7 +28,7 @@ beforeEach(async done => {
 
   //Generate Random Id
   const db = cuid()
-  
+
   function clearDB() {
     return Promise.all(_.map(mongoose.connection.collections, c => remove(c)))
   }

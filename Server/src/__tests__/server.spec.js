@@ -16,9 +16,6 @@ describe('API Authentication:', () => {
       let response = await request(app).get('/api/employees')
       expect(response.statusCode).toBe(401)
 
-      response = await request(app).get('/api/list')
-      expect(response.statusCode).toBe(401)
-
       response = await request(app).get('/api/user')
       expect(response.statusCode).toBe(401)
     })
